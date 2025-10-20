@@ -41,11 +41,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pre_release_branches: "fast"
 
-      - name: Install Dependencies
-        run: pip install -r .scripts/requirements.txt
-
       - name: Clone `CSharp-Workflow-Scripts` Python script
         run: git clone https://github.com/T2PeNBiX99wcoxKv3A4g/CSharp-Workflow-Scripts.git .scripts
+
+      - name: Install Dependencies
+        run: pip install -r .scripts/requirements.txt
 
       - name: Change version in `Main.cs`
         id: change_version
