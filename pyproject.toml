@@ -1,11 +1,21 @@
 [project]
 name = "urlclean"
-version = "0.1.0"
-description = "Add your description here"
-requires-python = ">=3.12"
+version = "0.0.1"
+description = "Simple url cleaning script"
+requires-python = "==3.13.*"
 dependencies = [
+    "cx-freeze>=8.4.1",
     "icecream>=2.1.8",
     "pyperclip>=1.11.0",
     "requests>=2.32.5",
     "typer>=0.19.2",
 ]
+
+[tool.cxfreeze]
+executables = [
+    { script = "main.py", base = "console", target_name = "urlclean" }
+]
+
+[tool.cxfreeze.build_exe]
+zip_include_packages = ["icecream", "pyperclip", "requests", "typer"]
+optimize = 2

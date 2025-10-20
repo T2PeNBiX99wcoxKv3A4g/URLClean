@@ -1,0 +1,143 @@
+name: Pre Release
+
+on:
+  push:
+    branches:
+      - fast
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'LICENSE'
+
+jobs:
+  windows-release-build:
+    name: Windows Latest Build
+    runs-on: windows-latest
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      new_version: ${{ steps.change_version.outputs.new_version }}
+      changelog: ${{ steps.git-cliff2.outputs.content }}
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pre_release_branches: "fast"
+          custom_release_rules: "fix:prerelease,feat:prerelease"
+
+      - name: Pull changes
+        run: git pull
+
+      - name: Clone `CSharp-Workflow-Scripts` Python script
+        run: git clone https://github.com/T2PeNBiX99wcoxKv3A4g/CSharp-Workflow-Scripts.git .scripts
+
+      - name: Setup Python
+        run: uv python install
+
+      - name: Change version in `Main.cs`
+        id: change_version
+        run: python .scripts/change_version.py change-version ./pyproject.toml version ${{ steps.tag_version.outputs.new_tag }}
+
+      - name: Remove all python scripts
+        run: Remove-Item -Force -Recurse .scripts
+
+      - name: Install `typos-cli` from `crates.io`
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: typos-cli
+
+      - name: Pull changes
+        run: git pull
+
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          args: --verbose --config-url https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/Git-Cliff-Template/refs/heads/master/cliff.toml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Set git user
+        uses: fregante/setup-git-user@v2
+
+      - name: Check for changes
+        run: git status
+
+      - name: Stage changed files
+        run: git add .
+
+      - name: Commit changed files
+        run: "git commit -m 'Action: Update version in `pyproject.toml` and update `CHANGELOG.md`'"
+
+      - name: Fetch from master
+        run: git fetch origin master
+
+      - name: Push code to master
+        run: git push origin master
+
+      - name: Run Test
+        run: uv run ./main.py --help
+
+      - name: Build Executable
+        run: uv run cxfreeze build
+
+      - name: Pull changes
+        run: git pull
+
+      - name: Generate a release body
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff2
+        with:
+          args: --verbose --latest --strip header --config-url https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/Git-Cliff-Template/refs/heads/master/cliff.toml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Create Archive
+        uses: thedoctor0/zip-release@0.7.6
+        with:
+          type: 'zip'
+          filename: 'URLClean.zip'
+          exclusions: '*.git* /*node_modules/* .editorconfig'
+          directory: build/exe.*
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: build/exe.*/URLClean.zip
+  
+  upload:
+    name: Create Pre Release
+    permissions:
+      contents: write
+    needs: [ windows-release-build ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: release
+          merge-multiple: true
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ needs.windows-release-build.outputs.new_tag }}
+          name: Pre Release ${{ needs.windows-release-build.outputs.new_tag }}
+          body: ${{ needs.windows-release-build.outputs.changelog }}
+          prerelease: true
