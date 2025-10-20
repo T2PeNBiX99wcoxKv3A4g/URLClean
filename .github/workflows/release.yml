@@ -10,9 +10,11 @@ on:
       - 'LICENSE'
 
 jobs:
-  windows-release-build:
-    name: Windows Latest Build
-    runs-on: windows-latest
+  version-change:
+    name: Version Change
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
     outputs:
       new_tag: ${{ steps.tag_version.outputs.new_tag }}
       new_version: ${{ steps.change_version.outputs.new_version }}
@@ -23,8 +25,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v7
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '>=3.14'
+          cache: 'pip'
+
+      - name: Pull changes
+        run: git pull
 
       - name: Bump version and push tag
         id: tag_version
@@ -33,21 +41,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pre_release_branches: "fast"
 
-      - name: Pull changes
-        run: git pull
+      - name: Install Dependencies
+        run: pip install -r .scripts/requirements.txt
 
       - name: Clone `CSharp-Workflow-Scripts` Python script
         run: git clone https://github.com/T2PeNBiX99wcoxKv3A4g/CSharp-Workflow-Scripts.git .scripts
-
-      - name: Setup Python
-        run: uv python install
 
       - name: Change version in `Main.cs`
         id: change_version
         run: python .scripts/change_version.py change-version ./pyproject.toml version ${{ steps.tag_version.outputs.new_tag }}
 
       - name: Remove all python scripts
-        run: Remove-Item -Force -Recurse .scripts
+        run: rm -rf .scripts
 
       - name: Install `typos-cli` from `crates.io`
         uses: baptiste0928/cargo-install@v3
@@ -85,12 +90,6 @@ jobs:
       - name: Push code to master
         run: git push origin master
 
-      - name: Run Test
-        run: uv run ./main.py --help
-
-      - name: Build Executable
-        run: uv run cxfreeze build
-
       - name: Pull changes
         run: git pull
 
@@ -104,11 +103,33 @@ jobs:
           OUTPUT: CHANGES.md
           GITHUB_REPO: ${{ github.repository }}
 
+  windows-release-build:
+    name: Windows Latest Build
+    needs: [ version-change ]
+    runs-on: windows-latest
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Setup Python
+        run: uv python install
+
+      - name: Run Test
+        run: uv run ./main.py --help
+
+      - name: Build Executable
+        run: uv run cxfreeze build
+
       - name: Create Archive
         uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
-          filename: 'URLClean.zip'
+          filename: 'URLClean-Windows.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
           directory: build/exe.*
 
@@ -116,13 +137,49 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build/exe.*/URLClean.zip
+          path: build/exe.*/URLClean-Windows.zip
+  
+  linux-release-build:
+    name: Linux Latest Build
+    needs: [ version-change ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Setup Python
+        run: uv python install
+
+      - name: Run Test
+        run: uv run ./main.py --help
+
+      - name: Build Executable
+        run: uv run cxfreeze build
+
+      - name: Create Archive
+        uses: thedoctor0/zip-release@0.7.6
+        with:
+          type: 'zip'
+          filename: 'URLClean-Linux.zip'
+          exclusions: '*.git* /*node_modules/* .editorconfig'
+          directory: build/exe.*
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux
+          path: build/exe.*/URLClean-Linux.zip
   
   upload:
     name: Create Release
     permissions:
       contents: write
-    needs: [ windows-release-build ]
+    needs: [ version-change, windows-release-build, linux-release-build ]
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
@@ -136,6 +193,6 @@ jobs:
         with:
           artifacts: "release/*"
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ needs.windows-release-build.outputs.new_tag }}
-          name: Release ${{ needs.windows-release-build.outputs.new_tag }}
-          body: ${{ needs.windows-release-build.outputs.changelog }}
+          tag: ${{ needs.version-change.outputs.new_tag }}
+          name: Release ${{ needs.version-change.outputs.new_tag }}
+          body: ${{ needs.version-change.outputs.changelog }}
