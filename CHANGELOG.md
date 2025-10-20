@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.0.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.3..v0.0.4) - 2025-10-20
+
+### 🐛 Bug Fixes
+
+- *(pyproject)* Bump `typer` dependency to version 0.20.0 - ([123efdc](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/123efdcc053decdc42fef80de3fdd76a7dffd4e1))
+- *(pyproject)* Update `tool.cxfreeze` configuration format and add metadata fields - ([88be37e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/88be37e2e36c98891efa823a42f7f6f15686b8c9))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(dependabot)* Introduce dependabot configuration for daily pip updates - ([6e1aee0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/6e1aee055a9d09cd265a2777d8218d6ab8acdd8c))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([f6a2ba3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/f6a2ba342209948f65083b45371ba2dd8107fb64))
+
+
 ## [0.0.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.2..v0.0.3) - 2025-10-20
 
 ### 🐛 Bug Fixes
