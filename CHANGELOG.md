@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.2..v0.0.3) - 2025-10-20
+
+### 🐛 Bug Fixes
+
+- *(Workflow)* Update artifact paths to include specific platform and Python version directories - ([cb0d6fe](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/cb0d6feaa8e84423cd4487e3afdc45d7d35e98ce))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([d7708ce](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/d7708cec5793ac2f61112d055b659a6bfb9aab10))
+
+## New Contributors ❤️
+
+* @github-actions[bot] made their first contribution
+
 ## [0.0.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.1..v0.0.2) - 2025-10-20
 
 ### 🐛 Bug Fixes
