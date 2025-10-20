@@ -131,13 +131,13 @@ jobs:
           type: 'zip'
           filename: 'URLClean-Windows.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: build/exe.*
+          directory: build/exe.win-amd64-3.13
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build/exe.*/URLClean-Windows.zip
+          path: build/exe.win-amd64-3.13/URLClean-Windows.zip
   
   linux-release-build:
     name: Linux Latest Build
@@ -167,13 +167,13 @@ jobs:
           type: 'zip'
           filename: 'URLClean-Linux.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: build/exe.*
+          directory: build/exe.linux-x86_64-3.13
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-linux
-          path: build/exe.*/URLClean-Linux.zip
+          path: build/exe.linux-x86_64-3.13/URLClean-Linux.zip
   
   upload:
     name: Create Release
