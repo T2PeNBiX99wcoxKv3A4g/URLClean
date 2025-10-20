@@ -55,7 +55,6 @@ def fetch_true_url(url: str, debug: bool = False):
     pyperclip.copy(the_clean_url)
     typer.echo(f"Cleaned URL: {the_clean_url}")
     typer.echo(f"Copied to clipboard")
-    
 
 
 if __name__ == '__main__':
