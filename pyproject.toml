@@ -11,10 +11,13 @@ dependencies = [
     "typer>=0.19.2",
 ]
 
-[tool.cxfreeze]
-executables = [
-    { script = "main.py", base = "console", target_name = "urlclean" }
-]
+[[tool.cxfreeze.executables]]
+script = "main.py"
+base = "console"
+copyright = "Copyright (C) 2025 yukiyosanako"
+target_name = "urlclean"
+#shortcut_name = "urlclean"
+#shortcut_dir = "MyProgramMenu"
 
 [tool.cxfreeze.build_exe]
 zip_include_packages = ["icecream", "pyperclip", "requests", "typer"]
