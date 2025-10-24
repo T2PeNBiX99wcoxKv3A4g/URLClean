@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.4..v0.1.0) - 2025-10-24
+
+### ⛰️  Features
+
+- *(main.py)* Add `clipboard_watchers` command and improve URL processing logic - ([2be9213](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/2be921363a9afd681bba969607f2bafc1ae2aa8b))
+
+### 🐛 Bug Fixes
+
+- *(Workflow)* Add workflow for auto-merging Dependabot pull requests - ([7d33c43](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/7d33c436a896cc7d29c400affc48ec2df4ae1797))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(gitignore)* Update `.gitignore` to exclude build and distribution directories - ([185a602](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/185a602a44c1b3e114fe117c83dd74c7b4164517))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([be1dea5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/be1dea559f4cc4fcd82082d2721695fef2ff4d4e))
+
+
 ## [0.0.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.3..v0.0.4) - 2025-10-20
 
 ### 🐛 Bug Fixes
