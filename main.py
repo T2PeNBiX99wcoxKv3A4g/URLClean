@@ -94,6 +94,10 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, debug
                 continue
 
             return_url = actual_url if only_fetch else get_clean_url(actual_url)
+
+            if return_url == last_clipboard_content:
+                continue
+
             last_clipboard_content = return_url
             pyperclip.copy(return_url)
             typer.echo(f"Cleaned URL: {return_url}")
