@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.1.0..v0.1.1) - 2025-10-24
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Prevent redundant clipboard updates for unchanged URLs - ([2acbdb6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/2acbdb6e1c155094e7533eb9cb9800feef37606e))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([4110af5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/4110af599c624c5f33082d839744951c0b3633bc))
+
+
 ## [0.1.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.0.4..v0.1.0) - 2025-10-24
 
 ### ⛰️  Features
