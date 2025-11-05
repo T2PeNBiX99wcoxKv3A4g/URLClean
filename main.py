@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import time
 
 import pyperclip
@@ -12,9 +13,14 @@ from sha256check import hash_file_check
 
 app = typer.Typer()
 redirection_status_codes = [301, 302, 307, 308]
-file_path = os.path.dirname(os.path.realpath(__file__))
+
+
+def get_data_dir() -> str:
+    return os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.dirname(__file__)
+
+
 whitelist = {}
-whitelist_path = os.path.join(file_path, "whitelist.json")
+whitelist_path = os.path.join(get_data_dir(), "whitelist.json")
 whitelist_hash_path = whitelist_path + ".sha256"
 whitelist_last_downloaded_path = whitelist_path + ".last_downloaded"
 whitelist_hash_last_downloaded_path = whitelist_hash_path + ".last_downloaded"
@@ -214,5 +220,6 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, downl
             time.sleep(sleep_seconds)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    ic(whitelist_path)
     app()
