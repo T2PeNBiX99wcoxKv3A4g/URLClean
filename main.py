@@ -137,13 +137,15 @@ def get_clean_url(url: str) -> str:
 def get_actual_url(url: str, only_one: bool = False) -> str | None:
     if url is None:
         raise NoneUrlException("URL is None")
-    get_blacklist()
+    get_whitelist()
     parsed_url = ic(URL(url))
     host = ic(parsed_url.host)
-    not_allow_query_params = blacklist[host] if host in blacklist else []
+    path = ic(parsed_url.raw_path)
+    allow_query_paths = whitelist[host] if host in whitelist else []
+    allow_query_params = allow_query_paths[path] if path in allow_query_paths else []
     new_query_params = {}
     for param in ic(parsed_url.query.items()):
-        if ic(param[0]) in not_allow_query_params:
+        if ic(param[0]) not in allow_query_params:
             continue
         new_query_params[param[0]] = param[1]
     new_url = ic(parsed_url.with_query(new_query_params).human_repr())
