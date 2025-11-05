@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.4..v0.2.5) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Simplify whitelist path handling - ([20c6b32](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/20c6b328cd370ee1d38d8abe797ee8a9aa1a9e3c))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([64d181e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/64d181eb7a739e08c49356b4b805ee97ebee8bfc))
+
+
 ## [0.2.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.3..v0.2.4) - 2025-11-05
 
 ### 🚜 Refactor
