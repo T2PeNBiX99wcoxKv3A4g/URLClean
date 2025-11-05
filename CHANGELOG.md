@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.1.1..v0.2.0) - 2025-11-05
+
+### ⛰️  Features
+
+- *(main.py)* Implement whitelist download and validation mechanism - ([5ba07af](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/5ba07afe68f505449d08bbad94b6ac7f627f38b1))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([e4dd01c](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/e4dd01cce1f0566f82e18752e9fbd69cde935c77))
+
+
 ## [0.1.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.1.0..v0.1.1) - 2025-10-24
 
 ### 🐛 Bug Fixes
