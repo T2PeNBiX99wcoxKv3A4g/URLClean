@@ -87,7 +87,7 @@ def upgrade_list_or_do_nothing(filename: str, force: bool = False) -> str:
         return file_path
     if not download_file(hash_file, force) and not os.path.isfile(file_hash_path):
         raise DownloadException(f"Unable to download '{hash_file}'")
-    if not hash_file_check(file_hash_path) and not download_file(filename, force):
+    if not hash_file_check(file_hash_path, get_data_dir()) and not download_file(filename, force):
         raise DownloadException(f"Unable to download {filename}")
     return file_path
 
@@ -160,7 +160,7 @@ def get_actual_url(url: str, only_one: bool = False) -> str | None:
         return None
 
 
-@app.command()
+@app.command(help="Updates the whitelist and blacklist files.")
 def list_update(debug: bool = False) -> None:
     """
     Updates the whitelist and blacklist files by forcing their upgrade process. Optionally provides debug 
@@ -174,7 +174,7 @@ def list_update(debug: bool = False) -> None:
     typer.echo("Force list updated")
 
 
-@app.command()
+@app.command(help="Cleans a given URL and copies it to the system clipboard.")
 def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
     """
     Cleans a given URL, copies it to the system clipboard, and outputs the cleaned 
@@ -194,7 +194,7 @@ def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
     typer.echo(f"Copied to clipboard")
 
 
-@app.command()
+@app.command(help="Fetches and processes the query parameters from the given URL.")
 def fetch_url_query_params(url: str, download_interval: int = 3600, debug: bool = False):
     """
     Fetches and processes query parameters from the given URL. The function resolves
@@ -219,7 +219,7 @@ def fetch_url_query_params(url: str, download_interval: int = 3600, debug: bool 
     typer.echo(f"Fetched URL query params: {", ".join(ret_list)}")
 
 
-@app.command()
+@app.command(help="Fetches and processes the true URL for a given input URL.")
 def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 3600, debug: bool = False):
     """
     Fetches and processes the true URL for a given input URL. This function retrieves the
@@ -246,7 +246,7 @@ def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 
     typer.echo(f"Copied to clipboard")
 
 
-@app.command()
+@app.command(help="Monitors the clipboard for URLs and processes them to generate cleaned URLs or fetch actual URLs.")
 def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, download_interval: int = 3600,
                        debug: bool = False):
     """
