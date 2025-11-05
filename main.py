@@ -221,5 +221,4 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, downl
 
 
 if __name__ == "__main__":
-    ic(whitelist_path)
     app()
