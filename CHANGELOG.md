@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.0..v0.3.1) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(sha256check.py, main.py)* Enhance hash checking with directory support and improve command documentation - ([be2ae5f](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/be2ae5fb931770570dc24c6eb09c82213f309609))
+
+### 📚 Documentation
+
+- *(README)* Fix typo in `fetch-url-query-params` command name - ([0f120d4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/0f120d44c71569bb37d03c85d3e7db3a8a4898b5))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([1aa449e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/1aa449e7d500f376f1b79e023f4e03617c4a138f))
+
+
 ## [0.3.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.6..v0.3.0) - 2025-11-05
 
 ### ⛰️  Features
