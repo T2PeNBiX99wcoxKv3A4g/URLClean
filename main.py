@@ -1,16 +1,24 @@
+import json
+import os
 import time
-from urllib.parse import urlparse
 
 import pyperclip
 import requests
 import typer
+from furl import furl
 from icecream import ic
+
+from sha256check import hash_file_check
 
 app = typer.Typer()
 redirection_status_codes = [301, 302, 307, 308]
 
 
 class NoneUrlException(Exception):
+    pass
+
+
+class DownloadException(Exception):
     pass
 
 
@@ -21,9 +29,96 @@ def debug_output_control(debug: bool) -> None:
         ic.disable()
 
 
+whitelist = {}
+whitelist_path = "./whitelist.json"
+whitelist_hash_path = whitelist_path + ".sha256"
+whitelist_last_downloaded_path = whitelist_path + ".last_downloaded"
+whitelist_hash_last_downloaded_path = whitelist_hash_path + ".last_downloaded"
+whitelist_download_interval = 3600
+
+
+def is_skip_download(path: str) -> bool:
+    if not os.path.isfile(path):
+        return False
+    with open(path, "r") as file:
+        try:
+            last_downloaded = float(file.read())
+            return time.time() - last_downloaded < whitelist_download_interval
+        except ValueError:
+            return False
+
+
+def create_last_downloaded_file(path: str) -> None:
+    time_now = ic(time.time())
+    with open(path, "w") as file:
+        file.write(str(time_now))
+
+
+def download_white_list(force: bool = False) -> bool:
+    if not force and is_skip_download(whitelist_last_downloaded_path) and os.path.isfile(whitelist_path):
+        return True
+    file_response = ic(requests.get(
+        "https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/URLClean.Whitelist/refs/heads/master/whitelist.json"))
+    if file_response.status_code != 200:
+        return False
+    with open(whitelist_path, "wb") as file:
+        file.write(file_response.content)
+    create_last_downloaded_file(whitelist_last_downloaded_path)
+    return True
+
+
+def download_white_list_hash(force: bool = False) -> bool:
+    if not force and is_skip_download(whitelist_hash_last_downloaded_path) and os.path.isfile(whitelist_hash_path):
+        return True
+    file_response = ic(requests.get(
+        "https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/URLClean.Whitelist/refs/heads/master/whitelist.json.sha256"))
+    if file_response.status_code != 200:
+        return False
+    with open(whitelist_hash_path, "wb") as file:
+        file.write(file_response.content)
+    create_last_downloaded_file(whitelist_hash_last_downloaded_path)
+    return True
+
+
+def upgrade_white_list_or_do_nothing() -> None:
+    if not os.path.isfile(whitelist_path):
+        if not download_white_list():
+            raise DownloadException("Unable to download whitelist")
+        return
+    if not download_white_list_hash() and not os.path.isfile(whitelist_hash_path):
+        raise DownloadException("Unable to download whitelist hash")
+    if not hash_file_check(whitelist_hash_path):
+        download_white_list()
+
+
+def get_whitelist() -> None:
+    global whitelist
+    upgrade_white_list_or_do_nothing()
+    with open(whitelist_path, "r") as file:
+        get_list = {}
+        try:
+            get_list = ic(json.loads(file.read()))
+        except json.decoder.JSONDecodeError as e:
+            typer.echo(f"Error: Invalid whitelist file\n{e}")
+        if len(get_list) < 1:
+            return
+        whitelist = get_list
+
+
 def get_clean_url(url: str) -> str:
-    url_parse = ic(urlparse(url))
-    return ic(url_parse.scheme + "://" + url_parse.netloc + url_parse.path)
+    get_whitelist()
+    f = ic(furl(url))
+    host = ic(f.host)
+    path = ic(str(f.path))
+    allow_query_paths = whitelist[host] if host in whitelist else []
+    allow_query_params = allow_query_paths[path] if path in allow_query_paths else []
+    remove_query_params = []
+    for param in ic(f.args):
+        if ic(param) in allow_query_params:
+            continue
+        remove_query_params.append(param)
+    f.remove(ic(remove_query_params))
+    return ic(f.url)
 
 
 def get_actual_url(url: str) -> str | None:
@@ -41,8 +136,18 @@ def get_actual_url(url: str) -> str | None:
 
 
 @app.command()
-def clean_url(url: str, debug: bool = False):
+def whitelist_update(debug: bool = False) -> None:
     debug_output_control(debug)
+    download_white_list(True)
+    download_white_list_hash(True)
+    typer.echo("Force whitelist updated")
+
+
+@app.command()
+def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
+    global whitelist_download_interval
+    debug_output_control(debug)
+    whitelist_download_interval = download_interval
     the_clean_url = get_clean_url(url)
     pyperclip.copy(the_clean_url)
     typer.echo(f"Cleaned URL: {the_clean_url}")
@@ -50,8 +155,10 @@ def clean_url(url: str, debug: bool = False):
 
 
 @app.command()
-def fetch_true_url(url: str, only_fetch: bool = False, debug: bool = False):
+def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 3600, debug: bool = False):
+    global whitelist_download_interval
     debug_output_control(debug)
+    whitelist_download_interval = download_interval
     actual_url = get_actual_url(url)
     if actual_url is None:
         typer.echo(f"Error: Unable to get actual URL of {url}")
@@ -64,9 +171,11 @@ def fetch_true_url(url: str, only_fetch: bool = False, debug: bool = False):
 
 
 @app.command()
-def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, debug: bool = False):
+def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, download_interval: int = 3600,
+                       debug: bool = False):
+    global whitelist_download_interval
     debug_output_control(debug)
-
+    whitelist_download_interval = download_interval
     last_clipboard_content = None
 
     while True:
