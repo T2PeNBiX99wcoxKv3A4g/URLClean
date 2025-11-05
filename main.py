@@ -24,6 +24,7 @@ whitelist = {}
 whitelist_file = "whitelist.json"
 blacklist = {}
 blacklist_file = "blacklist.json"
+last_download_time = {}
 
 
 class NoneUrlException(Exception):
@@ -47,6 +48,8 @@ def is_skip_download(path: str) -> bool:
     with open(path, "r") as file:
         try:
             last_downloaded = float(file.read())
+            if path in last_download_time and last_download_time[path] != last_downloaded:
+                return False
             return ic(time.time() - last_downloaded) < global_download_interval
         except ValueError:
             return False
@@ -56,6 +59,7 @@ def create_last_downloaded_file(path: str) -> None:
     time_now = ic(time.time())
     with open(path, "w") as file:
         file.write(str(time_now))
+    last_download_time[path] = time_now
 
 
 def download(url: str, path: str, force: bool = False) -> bool:

@@ -8,6 +8,33 @@ import re
 r = re.compile(r'(^[0-9A-Fa-f]+)\s+(\S.*)$')
 
 
+def sha256file(filename: str, find_dir: str = ".") -> str:
+    """
+    Computes and returns the SHA-256 hash of a file's contents. The hash is calculated
+    in chunks to avoid high memory usage when processing large files. The file is
+    expected to exist in the provided directory.
+
+    :param filename: The name of the file whose SHA-256 hash needs to be computed.
+    :param find_dir: The directory where the file is located. Defaults to the
+        current directory.
+    :return: The hexadecimal representation of the computed SHA-256 hash.
+    """
+    h = hashlib.sha256()
+    # This will raise an exception if the file doesn't exist. Catching
+    # and handling it is left as an exercise for the reader.
+    with open(os.path.join(find_dir, filename), 'rb') as fh:
+        # Read and hash the file in 4K chunks. Reading the whole
+        # file at once might consume a lot of memory if it is
+        # large.
+        while True:
+            data = fh.read(4096)
+            if len(data) == 0:
+                break
+            else:
+                h.update(data)
+    return h.hexdigest()
+
+
 def check(filename: str, expect: str, find_dir: str = ".") -> bool:
     """
     Compute the SHA-256 hash of a file and compare it to an expected hash value.
@@ -23,20 +50,7 @@ def check(filename: str, expect: str, find_dir: str = ".") -> bool:
         current directory.
     :return: True if the computed hash matches the expected hash, False otherwise.
     """
-    h = hashlib.sha256()
-    # This will raise an exception if the file doesn't exist. Catching
-    # and handling it is left as an exercise for the reader.
-    with open(os.path.join(find_dir, filename), 'rb') as fh:
-        # Read and hash the file in 4K chunks. Reading the whole
-        # file at once might consume a lot of memory if it is
-        # large.
-        while True:
-            data = fh.read(4096)
-            if len(data) == 0:
-                break
-            else:
-                h.update(data)
-    return expect == h.hexdigest()
+    return expect == sha256file(filename, find_dir)
 
 
 def hash_file_check(filename: str, find_dir: str = ".") -> bool:
