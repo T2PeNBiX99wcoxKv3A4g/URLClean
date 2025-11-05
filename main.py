@@ -5,8 +5,8 @@ import time
 import pyperclip
 import requests
 import typer
-from furl import furl
 from icecream import ic
+from yarl import URL
 
 from sha256check import hash_file_check
 
@@ -107,18 +107,17 @@ def get_whitelist() -> None:
 
 def get_clean_url(url: str) -> str:
     get_whitelist()
-    f = ic(furl(url))
-    host = ic(f.host)
-    path = ic(str(f.path))
+    parsed_url = ic(URL(url))
+    host = ic(parsed_url.host)
+    path = ic(str(parsed_url.raw_path))
     allow_query_paths = whitelist[host] if host in whitelist else []
     allow_query_params = allow_query_paths[path] if path in allow_query_paths else []
-    remove_query_params = []
-    for param in ic(f.args):
-        if ic(param) in allow_query_params:
+    new_query_params = {}
+    for param in ic(parsed_url.query.items()):
+        if ic(param[0]) not in allow_query_params:
             continue
-        remove_query_params.append(param)
-    f.remove(ic(remove_query_params))
-    return ic(f.url)
+        new_query_params[param[0]] = param[1]
+    return ic(parsed_url.with_query(new_query_params).human_repr())
 
 
 def get_actual_url(url: str) -> str | None:
