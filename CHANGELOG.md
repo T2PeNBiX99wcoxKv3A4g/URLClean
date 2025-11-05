@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.2..v0.2.3) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Enhance `upgrade_white_list_or_do_nothing` with `force` flag - ([4e4482d](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/4e4482d69a149ec77d3139cac08685c2cf929895))
+
+### 📚 Documentation
+
+- *(README)* Update command list with `whitelist-update` and `clipboard-watchers` options - ([0591cfa](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/0591cfaec475e3cf4c64cfe77444189e7ef2c7a7))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([46bfe42](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/46bfe42088d610bb8bcb0a50a2631d4d57ba13c1))
+
+
 ## [0.2.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.1..v0.2.2) - 2025-11-05
 
 ### 🐛 Bug Fixes
