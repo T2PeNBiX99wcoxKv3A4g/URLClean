@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.0..v0.2.1) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(pyproject)* Add `furl` to `zip_include_packages` in `tool.cxfreeze` configuration - ([373de60](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/373de609b62448f8e56feb14c9d838e28cadbfaa))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([233139f](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/233139f865c7d3770b26f04639ad6de152a4c769))
+
+
 ## [0.2.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.1.1..v0.2.0) - 2025-11-05
 
 ### ⛰️  Features
