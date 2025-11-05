@@ -12,6 +12,13 @@ from sha256check import hash_file_check
 
 app = typer.Typer()
 redirection_status_codes = [301, 302, 307, 308]
+file_path = os.path.dirname(os.path.realpath(__file__))
+whitelist = {}
+whitelist_path = os.path.join(file_path, "./whitelist.json")
+whitelist_hash_path = whitelist_path + ".sha256"
+whitelist_last_downloaded_path = whitelist_path + ".last_downloaded"
+whitelist_hash_last_downloaded_path = whitelist_hash_path + ".last_downloaded"
+whitelist_download_interval = 3600
 
 
 class NoneUrlException(Exception):
@@ -27,14 +34,6 @@ def debug_output_control(debug: bool) -> None:
         ic.enable()
     else:
         ic.disable()
-
-
-whitelist = {}
-whitelist_path = "./whitelist.json"
-whitelist_hash_path = whitelist_path + ".sha256"
-whitelist_last_downloaded_path = whitelist_path + ".last_downloaded"
-whitelist_hash_last_downloaded_path = whitelist_hash_path + ".last_downloaded"
-whitelist_download_interval = 3600
 
 
 def is_skip_download(path: str) -> bool:
