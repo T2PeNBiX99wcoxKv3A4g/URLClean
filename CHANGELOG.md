@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.4..v0.3.5) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Replace `blacklist` with `whitelist` for query parameter filtering - ([770cbba](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/770cbba4a848c278f3d6c2a0eb5b99c556b07c1a))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([8d1b031](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/8d1b031d76da283b49a1e28968f8ed6c9aa4e9d6))
+
+
 ## [0.3.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.3..v0.3.4) - 2025-11-05
 
 ### 🚜 Refactor
