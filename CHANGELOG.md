@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.3..v0.3.4) - 2025-11-05
+
+### 🚜 Refactor
+
+- *(main.py)* Remove unused `last_download_time` cache logic - ([2f6752a](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/2f6752af1ce74bb13ed4fa97288e6156b6c356e2))
+
+### 📚 Documentation
+
+- *(README)* Update command description for `list-update` - ([aff1d5d](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/aff1d5dfaf23d136d29f3efadfbcb834b3bc33ca))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([b0980eb](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/b0980ebe63e2045e23f05cdc3ac01c080db5f34d))
+
+
 ## [0.3.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.2..v0.3.3) - 2025-11-05
 
 ### 🐛 Bug Fixes
