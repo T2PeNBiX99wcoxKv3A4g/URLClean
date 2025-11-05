@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.1..v0.2.2) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Remove unnecessary string conversion of `raw_path` - ([5ea93dd](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/5ea93dd7e0690cc984dd0a0fa931c2dca8fb06ae))
+- *(pyproject, main.py)* Replace `furl` with `yarl` for URL handling - ([14700dd](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/14700ddd5999c66b037bf3a9610832a40a92e589))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(gitignore)* Update `.gitignore` to exclude `dist` directory - ([4e30f4e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/4e30f4ec1c7cb78ca4e05d3ef81a20d2f375802a))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([fd2a238](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/fd2a238cd525e2963009e57c83a1edba4c36d62b))
+
+
 ## [0.2.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.0..v0.2.1) - 2025-11-05
 
 ### 🐛 Bug Fixes
