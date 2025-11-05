@@ -47,7 +47,7 @@ def is_skip_download(path: str) -> bool:
     with open(path, "r") as file:
         try:
             last_downloaded = float(file.read())
-            return time.time() - last_downloaded < global_download_interval
+            return ic(time.time() - last_downloaded) < global_download_interval
         except ValueError:
             return False
 
@@ -60,7 +60,7 @@ def create_last_downloaded_file(path: str) -> None:
 
 def download(url: str, path: str, force: bool = False) -> bool:
     last_downloaded_file = f"{path}.last_downloaded"
-    if not force and is_skip_download(last_downloaded_file) and os.path.isfile(path):
+    if not force and ic(is_skip_download(last_downloaded_file)) and os.path.isfile(path):
         return True
     file_response = ic(requests.get(url))
     if file_response.status_code != 200:
@@ -134,7 +134,7 @@ def get_clean_url(url: str) -> str:
     return ic(parsed_url.with_query(new_query_params).human_repr())
 
 
-def get_actual_url(url: str) -> str | None:
+def get_actual_url(url: str, only_one: bool = False) -> str | None:
     if url is None:
         raise NoneUrlException("URL is None")
     get_blacklist()
@@ -151,6 +151,8 @@ def get_actual_url(url: str) -> str | None:
         response = ic(requests.head(new_url))
         if ic(response.status_code) in redirection_status_codes:
             headers = ic(response.headers)
+            if only_one:
+                return ic(headers["location"])
             return get_actual_url(ic(headers["location"]))
         return new_url
     except Exception as e:
@@ -160,6 +162,12 @@ def get_actual_url(url: str) -> str | None:
 
 @app.command()
 def list_update(debug: bool = False) -> None:
+    """
+    Updates the whitelist and blacklist files by forcing their upgrade process. Optionally provides debug 
+    output based on the given flag.
+
+    :param debug: Enables or disables debug mode. Defaults to False.
+    """
     debug_output_control(debug)
     upgrade_list_or_do_nothing(whitelist_file, True)
     upgrade_list_or_do_nothing(blacklist_file, True)
@@ -168,6 +176,15 @@ def list_update(debug: bool = False) -> None:
 
 @app.command()
 def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
+    """
+    Cleans a given URL, copies it to the system clipboard, and outputs the cleaned 
+    URL. The function also sets a global download interval and handles debug 
+    message control.
+
+    :param url: The URL string that needs to be cleaned.
+    :param download_interval: The interval in seconds between downloads. Defaults to 3600.
+    :param debug: Enables or disables debug mode. Defaults to False.
+    """
     global global_download_interval
     debug_output_control(debug)
     global_download_interval = download_interval
@@ -178,7 +195,43 @@ def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
 
 
 @app.command()
+def fetch_url_query_params(url: str, download_interval: int = 3600, debug: bool = False):
+    """
+    Fetches and processes query parameters from the given URL. The function resolves
+    an actual URL if redirects are present, parses it, and extracts the query
+    parameters to display. Additionally, it allows customization of the download
+    interval and toggles debugging output for logging purposes.
+
+    :param url: The URL to fetch and process query parameters from.
+    :param download_interval: The interval in seconds between downloads. Defaults to 3600.
+    :param debug: Enables or disables debug mode. Defaults to False.
+    """
+    global global_download_interval
+    debug_output_control(debug)
+    global_download_interval = download_interval
+    actual_url = get_actual_url(url, True)
+    if actual_url is None:
+        typer.echo(f"Error: Unable to get actual URL of {url}")
+        typer.Exit(code=1)
+        return
+    parsed_url = ic(URL(actual_url))
+    ret_list = [str(x) for x in parsed_url.query.items()]
+    typer.echo(f"Fetched URL query params: {", ".join(ret_list)}")
+
+
+@app.command()
 def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 3600, debug: bool = False):
+    """
+    Fetches and processes the true URL for a given input URL. This function retrieves the
+    actual URL, cleans it if necessary, and copies the final URL to the clipboard.
+    The operation can be performed in a "fetch-only" mode or include URL cleaning.
+    Additionally, it includes debug options and customizable download intervals.
+
+    :param url: The original URL to process.
+    :param only_fetch: Flag to decide whether to only fetch the actual URL or also clean it. Defaults to False.
+    :param download_interval: The interval in seconds between downloads. Defaults to 3600.
+    :param debug: Enables or disables debug mode. Defaults to False.
+    """
     global global_download_interval
     debug_output_control(debug)
     global_download_interval = download_interval
@@ -196,6 +249,18 @@ def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 
 @app.command()
 def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, download_interval: int = 3600,
                        debug: bool = False):
+    """
+    Monitors the clipboard for URLs and processes them to generate cleaned URLs or fetch actual URLs,
+    depending on the specified options.
+
+    The function runs indefinitely in a loop, checking the clipboard for changes and ensuring the
+    content is processed only if it contains a valid URL and is new.
+
+    :param only_fetch: If True, fetches the actual URL instead of cleaning it. Defaults to False.
+    :param sleep_seconds: Time interval (in seconds) to wait between successive clipboard checks. Defaults to 1.
+    :param download_interval: The interval in seconds between downloads. Defaults to 3600.
+    :param debug: Enables or disables debug mode. Defaults to False.
+    """
     global global_download_interval
     debug_output_control(debug)
     global_download_interval = download_interval
