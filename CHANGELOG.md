@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.1..v0.3.2) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(sha256check.py)* Add `find_dir` parameter to `check` call for directory support - ([eea2695](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/eea2695c3164bbcece8c947bbeca1fd3bb54cf2c))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([6506354](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/65063540b1146869f793b252a678ff9b5823559f))
+
+
 ## [0.3.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.0..v0.3.1) - 2025-11-05
 
 ### 🐛 Bug Fixes
