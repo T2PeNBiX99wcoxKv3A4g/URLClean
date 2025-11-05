@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.3..v0.2.4) - 2025-11-05
+
+### 🚜 Refactor
+
+- *(main.py)* Reorganize whitelist-related variables - ([43d6eac](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/43d6eace704719b1c9482b22600f238125c2b5d5))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([a531a70](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/a531a70398a15bd65f897088a99b2b65f659e893))
+
+
 ## [0.2.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.2..v0.2.3) - 2025-11-05
 
 ### 🐛 Bug Fixes
