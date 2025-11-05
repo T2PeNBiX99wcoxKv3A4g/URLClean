@@ -12,19 +12,18 @@ from yarl import URL
 from sha256check import hash_file_check
 
 app = typer.Typer()
-redirection_status_codes = [301, 302, 307, 308]
+redirection_status_codes = [301, 302, 303, 307, 308]
 
 
 def get_data_dir() -> str:
     return os.path.dirname(sys.executable) if getattr(sys, "frozen", False) else os.path.dirname(__file__)
 
 
+global_download_interval = 3600
 whitelist = {}
-whitelist_path = os.path.join(get_data_dir(), "whitelist.json")
-whitelist_hash_path = whitelist_path + ".sha256"
-whitelist_last_downloaded_path = whitelist_path + ".last_downloaded"
-whitelist_hash_last_downloaded_path = whitelist_hash_path + ".last_downloaded"
-whitelist_download_interval = 3600
+whitelist_file = "whitelist.json"
+blacklist = {}
+blacklist_file = "blacklist.json"
 
 
 class NoneUrlException(Exception):
@@ -48,7 +47,7 @@ def is_skip_download(path: str) -> bool:
     with open(path, "r") as file:
         try:
             last_downloaded = float(file.read())
-            return time.time() - last_downloaded < whitelist_download_interval
+            return time.time() - last_downloaded < global_download_interval
         except ValueError:
             return False
 
@@ -59,55 +58,65 @@ def create_last_downloaded_file(path: str) -> None:
         file.write(str(time_now))
 
 
-def download_white_list(force: bool = False) -> bool:
-    if not force and is_skip_download(whitelist_last_downloaded_path) and os.path.isfile(whitelist_path):
+def download(url: str, path: str, force: bool = False) -> bool:
+    last_downloaded_file = f"{path}.last_downloaded"
+    if not force and is_skip_download(last_downloaded_file) and os.path.isfile(path):
         return True
-    file_response = ic(requests.get(
-        "https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/URLClean.Whitelist/refs/heads/master/whitelist.json"))
+    file_response = ic(requests.get(url))
     if file_response.status_code != 200:
         return False
-    with open(whitelist_path, "wb") as file:
+    with open(path, "wb") as file:
         file.write(file_response.content)
-    create_last_downloaded_file(whitelist_last_downloaded_path)
+    create_last_downloaded_file(last_downloaded_file)
     return True
 
 
-def download_white_list_hash(force: bool = False) -> bool:
-    if not force and is_skip_download(whitelist_hash_last_downloaded_path) and os.path.isfile(whitelist_hash_path):
-        return True
-    file_response = ic(requests.get(
-        "https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/URLClean.Whitelist/refs/heads/master/whitelist.json.sha256"))
-    if file_response.status_code != 200:
-        return False
-    with open(whitelist_hash_path, "wb") as file:
-        file.write(file_response.content)
-    create_last_downloaded_file(whitelist_hash_last_downloaded_path)
-    return True
+def download_file(filename: str, force: bool = False) -> bool:
+    return download(
+        f"https://raw.githubusercontent.com/T2PeNBiX99wcoxKv3A4g/URLClean.Whitelist/refs/heads/master/{filename}",
+        os.path.join(get_data_dir(), filename), force)
 
 
-def upgrade_white_list_or_do_nothing(force: bool = False) -> None:
-    if not os.path.isfile(whitelist_path):
-        if not download_white_list(force):
-            raise DownloadException("Unable to download whitelist")
-        return
-    if not download_white_list_hash(force) and not os.path.isfile(whitelist_hash_path):
-        raise DownloadException("Unable to download whitelist hash")
-    if not hash_file_check(whitelist_hash_path):
-        download_white_list()
+def upgrade_list_or_do_nothing(filename: str, force: bool = False) -> str:
+    hash_file = f"{filename}.sha256"
+    file_path = ic(os.path.join(get_data_dir(), filename))
+    file_hash_path = ic(os.path.join(get_data_dir(), hash_file))
+    if not os.path.isfile(file_path):
+        if not download_file(filename, force):
+            raise DownloadException(f"Unable to download {filename}")
+        return file_path
+    if not download_file(hash_file, force) and not os.path.isfile(file_hash_path):
+        raise DownloadException(f"Unable to download '{hash_file}'")
+    if not hash_file_check(file_hash_path) and not download_file(filename, force):
+        raise DownloadException(f"Unable to download {filename}")
+    return file_path
+
+
+def get_list(filename: str) -> dict:
+    with open(upgrade_list_or_do_nothing(filename), "r") as file:
+        ret_list = {}
+        try:
+            ret_list = ic(json.loads(file.read()))
+        except json.decoder.JSONDecodeError as e:
+            typer.echo(f"Error: Invalid {filename} file\n{e}")
+        finally:
+            return ret_list
 
 
 def get_whitelist() -> None:
     global whitelist
-    upgrade_white_list_or_do_nothing()
-    with open(whitelist_path, "r") as file:
-        get_list = {}
-        try:
-            get_list = ic(json.loads(file.read()))
-        except json.decoder.JSONDecodeError as e:
-            typer.echo(f"Error: Invalid whitelist file\n{e}")
-        if len(get_list) < 1:
-            return
-        whitelist = get_list
+    ret_list = get_list(whitelist_file)
+    if len(ret_list) < 1:
+        return
+    whitelist = ret_list
+
+
+def get_blacklist() -> None:
+    global blacklist
+    ret_list = get_list(blacklist_file)
+    if len(ret_list) < 1:
+        return
+    blacklist = ret_list
 
 
 def get_clean_url(url: str) -> str:
@@ -128,29 +137,40 @@ def get_clean_url(url: str) -> str:
 def get_actual_url(url: str) -> str | None:
     if url is None:
         raise NoneUrlException("URL is None")
+    get_blacklist()
+    parsed_url = ic(URL(url))
+    host = ic(parsed_url.host)
+    not_allow_query_params = blacklist[host] if host in blacklist else []
+    new_query_params = {}
+    for param in ic(parsed_url.query.items()):
+        if ic(param[0]) in not_allow_query_params:
+            continue
+        new_query_params[param[0]] = param[1]
+    new_url = ic(parsed_url.with_query(new_query_params).human_repr())
     try:
-        response = ic(requests.head(url))
+        response = ic(requests.head(new_url))
         if ic(response.status_code) in redirection_status_codes:
             headers = ic(response.headers)
             return get_actual_url(ic(headers["location"]))
-        return url
+        return new_url
     except Exception as e:
         typer.echo(f"Error: {e}")
         return None
 
 
 @app.command()
-def whitelist_update(debug: bool = False) -> None:
+def list_update(debug: bool = False) -> None:
     debug_output_control(debug)
-    upgrade_white_list_or_do_nothing(True)
-    typer.echo("Force whitelist updated")
+    upgrade_list_or_do_nothing(whitelist_file, True)
+    upgrade_list_or_do_nothing(blacklist_file, True)
+    typer.echo("Force list updated")
 
 
 @app.command()
 def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
-    global whitelist_download_interval
+    global global_download_interval
     debug_output_control(debug)
-    whitelist_download_interval = download_interval
+    global_download_interval = download_interval
     the_clean_url = get_clean_url(url)
     pyperclip.copy(the_clean_url)
     typer.echo(f"Cleaned URL: {the_clean_url}")
@@ -159,9 +179,9 @@ def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
 
 @app.command()
 def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 3600, debug: bool = False):
-    global whitelist_download_interval
+    global global_download_interval
     debug_output_control(debug)
-    whitelist_download_interval = download_interval
+    global_download_interval = download_interval
     actual_url = get_actual_url(url)
     if actual_url is None:
         typer.echo(f"Error: Unable to get actual URL of {url}")
@@ -176,9 +196,9 @@ def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 
 @app.command()
 def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, download_interval: int = 3600,
                        debug: bool = False):
-    global whitelist_download_interval
+    global global_download_interval
     debug_output_control(debug)
-    whitelist_download_interval = download_interval
+    global_download_interval = download_interval
     last_clipboard_content = None
 
     while True:
