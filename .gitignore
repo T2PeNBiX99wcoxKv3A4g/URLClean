@@ -1,5 +1,6 @@
 /.idea/
 uv.lock
 build
+dist
 /*.build/
 /*.dist/
