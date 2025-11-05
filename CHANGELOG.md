@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.5..v0.2.6) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Resolve dynamic whitelist path for frozen builds - ([7592ad3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/7592ad3e953849172e93e08793db523df843bb8d))
+
+### 🚜 Refactor
+
+- *(main.py)* Remove debug call to `ic` - ([18a2b29](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/18a2b2940cf1c9c1b2bbeb2d8b232f84e985b57f))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([cf6b2df](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/cf6b2dfddba7091eb00e59041de7cbd2f67de32d))
+
+
 ## [0.2.5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.4..v0.2.5) - 2025-11-05
 
 ### 🐛 Bug Fixes
