@@ -109,7 +109,7 @@ def get_clean_url(url: str) -> str:
     get_whitelist()
     parsed_url = ic(URL(url))
     host = ic(parsed_url.host)
-    path = ic(str(parsed_url.raw_path))
+    path = ic(parsed_url.raw_path)
     allow_query_paths = whitelist[host] if host in whitelist else []
     allow_query_params = allow_query_paths[path] if path in allow_query_paths else []
     new_query_params = {}
