@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.6..v0.3.0) - 2025-11-05
+
+### ⛰️  Features
+
+- *(main.py, README)* Add `fetch_url_query_params` command and enhance docs - ([3647ed2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/3647ed2dbaeca64b066c64bb526aef1fb0593490))
+
+### 🚜 Refactor
+
+- *(main.py)* Generalize list handling and improve blacklist support - ([90e3fe5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/90e3fe572afdc76731bc50737ebc4aba3852ef05))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([7868773](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/78687735684b0d05b0bb658972c7264a9bf54413))
+
+
 ## [0.2.6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.2.5..v0.2.6) - 2025-11-05
 
 ### 🐛 Bug Fixes
