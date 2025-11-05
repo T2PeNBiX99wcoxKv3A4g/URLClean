@@ -60,6 +60,6 @@ def hash_file_check(filename: str, find_dir: str = ".") -> bool:
                 return False
             checksum = is_match.group(1)
             filename = is_match.group(2)
-            if not check(filename, checksum):
+            if not check(filename, checksum, find_dir):
                 return False
         return True
