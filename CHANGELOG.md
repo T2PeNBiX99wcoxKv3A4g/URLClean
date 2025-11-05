@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.2..v0.3.3) - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- *(sha256check.py, main.py)* Refactor hash computation and add last download time caching - ([81dca94](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/81dca949c542c14497590a356eb04b13f02a6800))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([260ac2e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/260ac2ec113f1b8c74c142f84f7fe820e011e598))
+
+
 ## [0.3.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.1..v0.3.2) - 2025-11-05
 
 ### 🐛 Bug Fixes
