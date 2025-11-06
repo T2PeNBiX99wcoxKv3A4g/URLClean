@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.5..v0.4.0) - 2025-11-06
+
+### ⛰️  Features
+
+- *(main.py)* Add `only_fetch` flag to `get_actual_url` and related commands - ([dc58bd9](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/dc58bd90750fc9c5fb0c411eb8e186c21741538e))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([b61b06b](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/b61b06b79d48a6c9888a51da5bfe4ea7c0180102))
+
+
 ## [0.3.5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.4..v0.3.5) - 2025-11-05
 
 ### 🐛 Bug Fixes
