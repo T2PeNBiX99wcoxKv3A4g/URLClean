@@ -134,21 +134,10 @@ def get_clean_url(url: str) -> str:
     return ic(parsed_url.with_query(new_query_params).human_repr())
 
 
-def get_actual_url(url: str, only_one: bool = False) -> str | None:
+def get_actual_url(url: str, only_fetch: bool = False, only_one: bool = False) -> str | None:
     if url is None:
         raise NoneUrlException("URL is None")
-    get_whitelist()
-    parsed_url = ic(URL(url))
-    host = ic(parsed_url.host)
-    path = ic(parsed_url.raw_path)
-    allow_query_paths = whitelist[host] if host in whitelist else []
-    allow_query_params = allow_query_paths[path] if path in allow_query_paths else []
-    new_query_params = {}
-    for param in ic(parsed_url.query.items()):
-        if ic(param[0]) not in allow_query_params:
-            continue
-        new_query_params[param[0]] = param[1]
-    new_url = ic(parsed_url.with_query(new_query_params).human_repr())
+    new_url = url if only_fetch else get_clean_url(url)
     try:
         response = ic(requests.head(new_url))
         if ic(response.status_code) in redirection_status_codes:
@@ -197,7 +186,7 @@ def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
 
 
 @app.command(help="Fetches and processes the query parameters from the given URL.")
-def fetch_url_query_params(url: str, download_interval: int = 3600, debug: bool = False):
+def fetch_url_query_params(url: str, only_fetch: bool = False, download_interval: int = 3600, debug: bool = False):
     """
     Fetches and processes query parameters from the given URL. The function resolves
     an actual URL if redirects are present, parses it, and extracts the query
@@ -205,13 +194,14 @@ def fetch_url_query_params(url: str, download_interval: int = 3600, debug: bool 
     interval and toggles debugging output for logging purposes.
 
     :param url: The URL to fetch and process query parameters from.
+    :param only_fetch: Flag to decide whether to only fetch the actual URL or also clean it. Defaults to False.
     :param download_interval: The interval in seconds between downloads. Defaults to 3600.
     :param debug: Enables or disables debug mode. Defaults to False.
     """
     global global_download_interval
     debug_output_control(debug)
     global_download_interval = download_interval
-    actual_url = get_actual_url(url, True)
+    actual_url = get_actual_url(url, only_fetch, True)
     if actual_url is None:
         typer.echo(f"Error: Unable to get actual URL of {url}")
         typer.Exit(code=1)
@@ -237,14 +227,13 @@ def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 
     global global_download_interval
     debug_output_control(debug)
     global_download_interval = download_interval
-    actual_url = get_actual_url(url)
+    actual_url = get_actual_url(url, only_fetch)
     if actual_url is None:
         typer.echo(f"Error: Unable to get actual URL of {url}")
         typer.Exit(code=1)
         return
-    return_url = actual_url if only_fetch else get_clean_url(actual_url)
-    pyperclip.copy(return_url)
-    typer.echo(f"Cleaned URL: {return_url}")
+    pyperclip.copy(actual_url)
+    typer.echo(f"Cleaned URL: {actual_url}")
     typer.echo(f"Copied to clipboard")
 
 
