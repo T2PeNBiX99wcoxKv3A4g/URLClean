@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.0..v0.4.1) - 2025-11-19
+
+### 🐛 Bug Fixes
+
+- *(main.py)* Replace `pyperclip` with `clipman` for clipboard operations - ([813f4c5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/813f4c5516863a1c7803766142c1ff418e44e5b5))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([91123b6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/91123b6db99c0844f65b563c60e1f85f25345a9d))
+
+
 ## [0.4.0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.3.5..v0.4.0) - 2025-11-06
 
 ### ⛰️  Features
