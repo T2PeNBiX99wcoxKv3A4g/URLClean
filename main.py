@@ -3,7 +3,7 @@ import os
 import sys
 import time
 
-import pyperclip
+import clipman
 import requests
 import typer
 from icecream import ic
@@ -180,7 +180,7 @@ def clean_url(url: str, download_interval: int = 3600, debug: bool = False):
     debug_output_control(debug)
     global_download_interval = download_interval
     the_clean_url = get_clean_url(url)
-    pyperclip.copy(the_clean_url)
+    clipman.copy(the_clean_url)
     typer.echo(f"Cleaned URL: {the_clean_url}")
     typer.echo(f"Copied to clipboard")
 
@@ -232,7 +232,7 @@ def fetch_true_url(url: str, only_fetch: bool = False, download_interval: int = 
         typer.echo(f"Error: Unable to get actual URL of {url}")
         typer.Exit(code=1)
         return
-    pyperclip.copy(actual_url)
+    clipman.copy(actual_url)
     typer.echo(f"Cleaned URL: {actual_url}")
     typer.echo(f"Copied to clipboard")
 
@@ -259,7 +259,7 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, downl
 
     while True:
         try:
-            clipboard_content = pyperclip.paste()
+            clipboard_content = clipman.paste()
 
             if type(clipboard_content) != str:
                 continue
@@ -287,7 +287,7 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, downl
                 continue
 
             last_clipboard_content = return_url
-            pyperclip.copy(return_url)
+            clipman.copy(return_url)
             typer.echo(f"Cleaned URL: {return_url}")
             typer.echo(f"Copied to clipboard")
         except Exception as e:
@@ -297,4 +297,5 @@ def clipboard_watchers(only_fetch: bool = False, sleep_seconds: float = 1, downl
 
 
 if __name__ == "__main__":
+    clipman.init()
     app()
