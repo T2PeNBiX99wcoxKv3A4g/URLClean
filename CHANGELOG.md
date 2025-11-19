@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.1..v0.4.2) - 2025-11-19
+
+### 🐛 Bug Fixes
+
+- *(pre-release.yml, release.yml)* Remove redundant test run step from CI configuration - ([e3ce552](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/e3ce552206f0a899907b0b1e7fad0af8177d45b1))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([f35b5ef](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/f35b5efd8952f4812b27820498a41cf7dd339fed))
+
+
 ## [0.4.1](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.0..v0.4.1) - 2025-11-19
 
 ### 🐛 Bug Fixes
