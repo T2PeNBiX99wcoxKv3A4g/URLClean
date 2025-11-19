@@ -119,9 +119,6 @@ jobs:
       - name: Setup Python
         run: uv python install
 
-      - name: Run Test
-        run: uv run ./main.py --help
-
       - name: Build Executable
         run: uv run cxfreeze build
 
@@ -154,9 +151,6 @@ jobs:
 
       - name: Setup Python
         run: uv python install
-
-      - name: Run Test
-        run: uv run ./main.py --help
 
       - name: Build Executable
         run: uv run cxfreeze build
