@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.4.7](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.6..v0.4.7) - 2026-09-15
+
+### 🐛 Bug Fixes
+
+- *(pre-release.yml)* Improve tagging, build directory detection, and action updates - ([a73eade](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/a73eade62105496932df58ef4c30d55fdd920882))
+- *(pyproject.toml)* Loosen Python version requirement to `>=3.14` - ([f454d06](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/f454d067741d1b7c4f3fa5d693f1663e9c32f241))
+- *(pyproject.toml)* Pin `yarl` dependency to version 1.24.5 - ([637e88f](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/637e88fe2e87e7a851507a3a887ebe4612cb2600))
+- *(release.yml)* Update pre-release branch to `dev` - ([68341f5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/68341f56e9cf654403a5a3dfdc85b1a368c99b2e))
+- *(release.yml)* Update workflows for improved tagging, build dir detection, and compatibility - ([f8ad5e4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/f8ad5e4f1c68cf27fef264826c5abadd937a297f))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(dependabot-auto-merge.yml)* Retry merge conflicts with recreate comment before abandoning - ([85942ec](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/85942ece76ca9205d5344fe7d7e6cdda31c3997f))
+- *(dependabot-auto-merge.yml)* Enhance workflow with improved PR author checks and auto-merge handling - ([a6d600c](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/a6d600cbe41ef703f1e700b27d782d25d7fdcecb))
+- Update `.gitignore` - ([bf57415](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/bf57415677fc5eb4b606250a9f2b881d47de4935))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([03392e5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/03392e5d6c2f80cda7b97ab214e45d481bac3be9))
+
+## New Contributors ❤️
+
+* @junie-agent made their first contribution
+
 ## [0.4.6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.5..v0.4.6) - 2026-09-15
 
 ### Action
