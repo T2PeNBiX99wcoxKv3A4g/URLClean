@@ -9,7 +9,7 @@ dependencies = [
     "icecream>=2.2.0",
     "requests>=2.34.2",
     "typer>=0.24.1",
-    "yarl>=1.22.0",
+    "yarl==1.24.5",
 ]
 
 [[tool.cxfreeze.executables]]
