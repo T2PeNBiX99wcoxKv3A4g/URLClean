@@ -2,7 +2,7 @@
 name = "urlclean"
 version = "0.4.6"
 description = "Simple url cleaning script"
-requires-python = "==3.13.*"
+requires-python = ">=3.14"
 dependencies = [
     "clipman>=3.3.3",
     "cx-freeze>=8.6.4",
