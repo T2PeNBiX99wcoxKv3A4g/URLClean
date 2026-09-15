@@ -1,14 +1,18 @@
 # Changelog
 
+## [0.4.4](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.3..v0.4.4) - 2026-09-15
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([b02363b](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/b02363b05c0d5dd0baa5cf37ba3b6d9862d38358))
+
+
 ## [0.4.3](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.2..v0.4.3) - 2026-09-15
 
 ### Action
 
 - Update version in `pyproject.toml` and update `CHANGELOG.md` - ([6646fd0](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/6646fd0cce34cc8e4dc83c2953773837425a1478))
 
-## New Contributors ❤️
-
-* @dependabot[bot] made their first contribution
 
 ## [0.4.2](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.1..v0.4.2) - 2025-11-19
 
