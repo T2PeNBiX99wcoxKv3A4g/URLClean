@@ -2,8 +2,9 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
+    branches-ignore:
+      - "dev/**"
+      - "dependabot/**"
     paths-ignore:
       - 'README.md'
       - '.gitignore'
@@ -21,15 +22,9 @@ jobs:
       changelog: ${{ steps.git-cliff2.outputs.content }}
     steps:
       - name: Check-out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '>=3.14'
-          cache: 'pip'
 
       - name: Pull changes
         run: git pull
@@ -41,8 +36,44 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pre_release_branches: "fast"
 
+      - name: Ensure tag exists
+        run: |
+          TAG="${{ steps.tag_version.outputs.new_tag }}"
+
+          if [ -z "$TAG" ]; then
+            echo "No tag generated!"
+            exit 1
+          fi
+
+          git fetch --tags
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists"
+          else
+            echo "Tag $TAG does not exist, creating..."
+
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
+
+      - name: Verify tag exists
+        run: |
+          git fetch --tags
+          if git rev-parse "${{ steps.tag_version.outputs.new_tag }}" >/dev/null 2>&1; then
+            echo "Tag exists"
+          else
+            echo "Tag missing!"
+            exit 1
+          fi
+
       - name: Clone `CSharp-Workflow-Scripts` Python script
         run: git clone https://github.com/T2PeNBiX99wcoxKv3A4g/CSharp-Workflow-Scripts.git .scripts
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '>=3.14'
+          cache: 'pip'
 
       - name: Install Dependencies
         run: pip install -r .scripts/requirements.txt
@@ -84,11 +115,11 @@ jobs:
       - name: Commit changed files
         run: "git commit -m 'Action: Update version in `pyproject.toml` and update `CHANGELOG.md`'"
 
-      - name: Fetch from master
-        run: git fetch origin master
+      - name: Fetch updates
+        run: git fetch origin ${{ github.ref_name }}
 
-      - name: Push code to master
-        run: git push origin master
+      - name: Push code
+        run: git push origin ${{ github.ref_name }}
 
       - name: Pull changes
         run: git pull
@@ -109,7 +140,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check-out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -121,6 +152,19 @@ jobs:
 
       - name: Build Executable
         run: uv run cxfreeze build
+
+      - name: Find Build Directory
+        id: build-dir
+        shell: pwsh
+        run: |
+          $dir = Get-ChildItem build -Directory -Filter 'exe.win-*' |
+            Select-Object -First 1 -ExpandProperty FullName
+
+          if (-not $dir) {
+            throw "Could not find cx_Freeze build directory."
+          }
+
+          "path=$dir" >> $env:GITHUB_OUTPUT
 
       - name: Create Archive
         uses: thedoctor0/zip-release@0.7.6
@@ -128,13 +172,13 @@ jobs:
           type: 'zip'
           filename: 'URLClean-Windows.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: build/exe.win-amd64-3.13
+          directory: ${{ steps.build-dir.outputs.path }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: build/exe.win-amd64-3.13/URLClean-Windows.zip
+          path: ${{ steps.build-dir.outputs.path }}/URLClean-Windows.zip
   
   linux-release-build:
     name: Linux Latest Build
@@ -142,7 +186,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check-out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -155,19 +199,32 @@ jobs:
       - name: Build Executable
         run: uv run cxfreeze build
 
+      - name: Find Build Directory
+        id: build-dir
+        shell: bash
+        run: |
+          dir=$(find build -maxdepth 1 -type d -name 'exe.linux-*' -print -quit)
+
+          if [ -z "$dir" ]; then
+            echo "Could not find cx_Freeze build directory."
+            exit 1
+          fi
+
+          echo "path=$dir" >> "$GITHUB_OUTPUT"
+
       - name: Create Archive
         uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           filename: 'URLClean-Linux.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: build/exe.linux-x86_64-3.13
+          directory: ${{ steps.build-dir.outputs.path }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-linux
-          path: build/exe.linux-x86_64-3.13/URLClean-Linux.zip
+          path: ${{ steps.build-dir.outputs.path }}/URLClean-Linux.zip
   
   upload:
     name: Create Release
