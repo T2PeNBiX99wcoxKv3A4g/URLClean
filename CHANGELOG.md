@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.6](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.5..v0.4.6) - 2026-09-15
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([1fe97aa](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/1fe97aad91bd63e4c47ed3ffc9a4b30ba2209fda))
+
+
 ## [0.4.5](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.4..v0.4.5) - 2026-09-15
 
 ### Action
