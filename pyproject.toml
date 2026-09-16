@@ -8,7 +8,7 @@ dependencies = [
     "cx-freeze>=8.7.0",
     "icecream>=2.2.0",
     "requests>=2.34.2",
-    "typer>=0.24.1",
+    "typer>=0.27.2",
     "yarl==1.24.5",
 ]
 
