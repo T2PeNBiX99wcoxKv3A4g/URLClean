@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.13](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.12..v0.4.13) - 2026-09-16
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Replace duplicate logic with reusable `python_uv_release` action in release workflows - ([5e0e06f](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/5e0e06fa14d5eef9648832369f54327935953934))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([cb7622e](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/cb7622e149767d66e9ebef20c4a0c62c6efe16aa))
+
+
 ## [0.4.12](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.11..v0.4.12) - 2026-09-16
 
 ### ⚙️ Miscellaneous Tasks
