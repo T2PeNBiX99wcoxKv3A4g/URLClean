@@ -5,7 +5,7 @@ description = "Simple url cleaning script"
 requires-python = ">=3.14"
 dependencies = [
     "clipman>=3.3.3",
-    "cx-freeze>=8.6.4",
+    "cx-freeze>=8.7.0",
     "icecream>=2.2.0",
     "requests>=2.34.2",
     "typer>=0.24.1",
