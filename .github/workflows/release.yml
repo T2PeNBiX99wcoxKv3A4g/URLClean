@@ -6,10 +6,10 @@ on:
       - "dev/**"
       - "dependabot/**"
     paths-ignore:
-      - 'README.md'
-      - '.gitignore'
-      - 'LICENSE'
-      - '.github/workflows/dependabot-auto-merge.yml'
+      - "README.md"
+      - ".gitignore"
+      - "LICENSE*"
+      - ".github/workflows/dependabot-auto-merge.yml"
 
 permissions:
   contents: write
@@ -19,5 +19,3 @@ jobs:
     uses: T2PeNBiX99wcoxKv3A4g/Release-Workflows/.github/workflows/python_uv_release.yml@main
     with:
       filename: URLClean
-      version_keyword: version
-      version_file_path: ./pyproject.toml
