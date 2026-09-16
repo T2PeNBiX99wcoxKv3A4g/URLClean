@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.10](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.9..v0.4.10) - 2026-09-16
+
+### 🐛 Bug Fixes
+
+- *(workflows)* Resolve unstable status error in dependabot auto-merge - ([7df6f65](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/7df6f6531c411f1737a7d3f1bb58e2f99016c6bd))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([a44bf01](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/a44bf01bb7a31422c46ba0575fd82b9c09289a14))
+
+
 ## [0.4.9](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.8..v0.4.9) - 2026-09-16
 
 ### Action
