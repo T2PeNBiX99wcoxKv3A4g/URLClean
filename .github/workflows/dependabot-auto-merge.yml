@@ -6,6 +6,7 @@ on:
       - opened
       - synchronize
       - reopened
+      - ready_for_review
 
 permissions:
   contents: write
@@ -23,12 +24,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          PR=$(gh api \
-            "/repos/${{ github.repository }}/pulls/$PR_NUMBER")
+          for i in {1..5}; do
+            PR=$(gh api \
+              "/repos/${{ github.repository }}/pulls/$PR_NUMBER")
 
-          AUTHOR=$(echo "$PR" | jq -r '.user.login')
-          MERGEABLE=$(echo "$PR" | jq -r '.mergeable')
-          MERGEABLE_STATE=$(echo "$PR" | jq -r '.mergeable_state')
+            AUTHOR=$(echo "$PR" | jq -r '.user.login')
+            MERGEABLE=$(echo "$PR" | jq -r '.mergeable')
+            MERGEABLE_STATE=$(echo "$PR" | jq -r '.mergeable_state')
+
+            if [ "$MERGEABLE" != "null" ] && [ "$MERGEABLE_STATE" != "unknown" ]; then
+              break
+            fi
+            echo "Waiting for mergeable state calculation... ($i/5)"
+            sleep 2
+          done
 
           echo "Author: $AUTHOR"
           echo "Mergeable: $MERGEABLE"
@@ -99,13 +108,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          gh api \
+          gh pr review "$PR_NUMBER" \
+            --approve \
+            --body 'Automatically approved because this pull request was opened by Dependabot.' || gh api \
             --method POST \
             "/repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
             -f event='APPROVE' \
             -f body='Automatically approved because this pull request was opened by Dependabot.'
 
-      - name: Enable GitHub auto-merge
+      - name: Merge or enable auto-merge for Dependabot pull request
         if: >
           steps.check.outputs.author == 'dependabot[bot]' &&
           steps.check.outputs.mergeable != 'false' &&
@@ -114,25 +125,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          gh api graphql \
-            -f query='
-              mutation($pullRequestId: ID!) {
-                enablePullRequestAutoMerge(
-                  input: {
-                    pullRequestId: $pullRequestId
-                    mergeMethod: MERGE
-                  }
-                ) {
-                  pullRequest {
-                    number
-                    autoMergeRequest {
-                      enabledAt
-                      mergeMethod
-                    }
-                  }
-                }
-              }
-            ' \
-            -F pullRequestId="$(gh api \
-              "/repos/${{ github.repository }}/pulls/$PR_NUMBER" \
-              --jq '.node_id')"
+          echo "Processing merge for Dependabot PR #$PR_NUMBER..."
+
+          # Try enabling GitHub native auto-merge first
+          if gh pr merge "$PR_NUMBER" --auto --merge; then
+            echo "Auto-merge enabled successfully for PR #$PR_NUMBER."
+          else
+            echo "Auto-merge could not be enabled directly (e.g. unstable status or direct merge available). Falling back to direct merge workflow..."
+
+            # If CI checks exist, wait for them to finish
+            if gh pr checks "$PR_NUMBER" >/dev/null 2>&1; then
+              echo "Waiting for CI checks to complete..."
+              if ! gh pr checks "$PR_NUMBER" --watch --fail-fast; then
+                echo "CI checks failed or were cancelled. Aborting merge."
+                exit 1
+              fi
+            fi
+
+            echo "Executing direct merge for PR #$PR_NUMBER..."
+            gh pr merge "$PR_NUMBER" --merge
+          fi
