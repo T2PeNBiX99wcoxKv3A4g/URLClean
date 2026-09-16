@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.14](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.13..v0.4.14) - 2026-09-16
+
+### ⚙️ Miscellaneous Tasks
+
+- *(workflows)* Refine paths-ignore patterns and simplify `python_uv_release` action usage in release workflows - ([e104fa8](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/e104fa83d660f08f4b542c7878610a3bcb157e1b))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([22e0cf9](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/22e0cf964021126705804340323ff171ad128a98))
+
+
 ## [0.4.13](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.12..v0.4.13) - 2026-09-16
 
 ### ⚙️ Miscellaneous Tasks
