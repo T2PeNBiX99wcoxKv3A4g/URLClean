@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.11](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.10..v0.4.11) - 2026-09-16
+
+### ⚙️ Miscellaneous Tasks
+
+- *(dependabot-auto-merge.yml)* Simplify workflow by using reusable action - ([df006da](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/df006da3b36e542fe14312e5428c9a84481a8b1e))
+- *(workflows)* Include `dependabot-auto-merge.yml` in workflow paths ignore - ([3b46a13](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/3b46a137d30461484ca3a5fb85116672bb4924ae))
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([9698add](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/9698add76a4eda5116c1a74341ee27fa21750450))
+
+
 ## [0.4.10](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.9..v0.4.10) - 2026-09-16
 
 ### 🐛 Bug Fixes
