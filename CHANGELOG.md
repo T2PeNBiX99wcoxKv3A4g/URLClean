@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.15](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.14..v0.4.15) - 2026-09-21
+
+### Action
+
+- Update version in `pyproject.toml` and update `CHANGELOG.md` - ([1a6fcca](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/commit/1a6fccae8335209fb6fbb28f589ff86d63d150af))
+
+
 ## [0.4.14](https://github.com/T2PeNBiX99wcoxKv3A4g/URLClean/compare/v0.4.13..v0.4.14) - 2026-09-16
 
 ### ⚙️ Miscellaneous Tasks
